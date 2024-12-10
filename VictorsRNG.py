@@ -74,6 +74,7 @@ SupremeDMG = 0
 
 # Personagens (cada personagem começa com vida e dano próprio)
 characters = {
+    "fruit": {"Rarity": "common","regen": 0},
     "Dummy": {"Rarity": "common", "Health": 5, "Attack": 1},
    
     "Rock": {"Rarity": "common", "Health": 1, "Attack": 10},
@@ -94,7 +95,7 @@ characters = {
     "Woodpecker": {"Rarity": "mythic", "Health": 900, "Attack": 300},
     "Ca-Caw": {"Rarity": "legendary", "Health": 4000, "Attack": 900},
     "God": {"Rarity": "legendary", "Health": 6000, "Attack": 900},
-    "Supreme Nerd": {"Rarity": "legendary", "Health": 6000, "Attack": 900},
+    "Supreme Nerd": {"Rarity": "legendary", "Health": 10000, "Attack": 6000},
 }
 
 # Função para limpar a tela
@@ -135,7 +136,7 @@ def Roll(single_roll=True):
         if 0 <= num < 100:
             item = "Dummy"
         elif 100 <= num < 200:
-            item = "Rock"
+            item = "fruit"
         elif 200 <= num < 300:
             item = "Big Ol Metal Bar (B.O.M.B)"
         elif 300 <= num < 400:
@@ -169,8 +170,11 @@ def Roll(single_roll=True):
         elif 998 <= num < 1000:
             item = "Ca-Caw"
         else:
-            item = "God"
-
+            aleatorio = random.randint(0,1)
+            if aleatorio == 0:
+                item = "God"
+            else:
+                item = "Supreme Nerd"
         PrintWithDelay(f"You rolled and got: {item} ({characters[item]['Rarity']})", 0.5)
         input("press enter to continue...")
 
@@ -375,10 +379,6 @@ def BattleCharacter(character_name):
     character_stats = characters[character_name]
     character_health = character_stats["Health"]
     character_attack = character_stats["Attack"]
-    
-    
-    
-
 
     # Gerar um inimigo aleatório
     enemy = GenerateBot()
@@ -388,31 +388,51 @@ def BattleCharacter(character_name):
 
     # Iniciar batalha
     PrintWithDelay(f"Battle starts! {character_name} vs. {enemy}", 1)
-    PrintWithDelay("Press enter to continue the battle.",1)
+    PrintWithDelay("Press enter to continue the battle.", 1)
     while character_health > 0 and enemy_health > 0:
         input("...")
-        a = random.randint(0,1)
+        a = random.randint(0, 1)
         if a == 0:
-            enemy_health-=character_attack
+            enemy_health -= character_attack
             PrintWithDelay(f"Your {character_name} attacks {enemy} for {character_attack} damage! {enemy} HP: {enemy_health}", 1)
             if enemy_health <= 0:
                 PrintWithDelay(f"{enemy} is defeated!", 1)
                 return True  # O jogador venceu
         else:
             character_health -= enemy_attack
-            takeDamage(character_name,enemy_attack)
+            takeDamage(character_name, enemy_attack)
             PrintWithDelay(f"{enemy} attacks {character_name} for {enemy_attack} damage! {character_name} HP: {character_health}", 1)
+
+            # Perguntar ao jogador se deseja usar uma fruta
+            if character_health > 0:
+                if "fruit" in ItemsOwned and ItemsOwned["fruit"] > 0:
+                    use_fruit = input("Do you want to use a fruit to heal? (y/n): ").strip().lower()
+                    if use_fruit == 'y':
+                        ItemsOwned["fruit"] -= 1  # Remove uma fruta do inventário
+                        if ItemsOwned["fruit"] == 0:
+                            del ItemsOwned["fruit"]
+
+                        heal_amount = max(1, character_health // 2)
+                        character_health += heal_amount
+
+                        # Verifica se ultrapassa a vida máxima
+                        if character_health > character_stats["Health"]:
+                            excess = character_health - character_stats["Health"]
+                            character_health = character_stats["Health"]
+                            PrintWithDelay(f"Your {character_name} used a fruit and fully healed! Excess healing of {excess} was discarded.", 1)
+                        else:
+                            PrintWithDelay(f"Your {character_name} used a fruit and healed {heal_amount} HP! Current HP: {character_health}", 1)
+                else:
+                    PrintWithDelay("You don't have any fruits left to use!", 1)
+
             if character_health <= 0:
                 PrintWithDelay(f"{character_name} is defeated!", 1)
-                
                 resetDamage(character_name)
                 return False  # O personagem morreu
-        
+
     return False  # Se o loop sair, significa que o personagem perdeu
 
-# Função para realizar a batalha
 def Battle():
-    
     global RollPoints, ItemsOwned
     # Verifica se o jogador tem personagens suficientes para batalhar
     if not ItemsOwned:
@@ -426,24 +446,26 @@ def Battle():
     while ItemsOwned:
         try:
             choice = int(input("Choose a character by number from your inventory: ").strip())
-            
+
             # Validar escolha
-            if 1 <= choice <= len(ItemsOwned):
+            valid_choices = [i + 1 for i, item in enumerate(ItemsOwned.keys()) if item != "fruit"]
+
+            if choice in valid_choices:
                 chosen_character = list(ItemsOwned.keys())[choice - 1]
-                
+
                 if ItemsOwned[chosen_character] > 0:
                     # Batalhar com o personagem escolhido
                     result = BattleCharacter(chosen_character)
-                    
+
                     if result:
                         # Se venceu, ganha Roll Points
                         PrintWithDelay(f"You win the battle with {chosen_character}!", 1)
-                        RollPoints+=3
+                        RollPoints += 3
                         PrintWithDelay(f"You gain 3 Roll Point! Total Roll Points: {RollPoints}", 0.5)
                     else:
                         # Se perdeu, remove o personagem do inventário
                         ItemsOwned[chosen_character] -= 1
-                        if RollPoints >0 :
+                        if RollPoints > 0:
                             RollPoints -= 1
 
                         if ItemsOwned[chosen_character] == 0:
