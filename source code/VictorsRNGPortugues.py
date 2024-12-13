@@ -112,7 +112,7 @@ def PrintWithDelay(text, delay=0.5):
 def ShowMainScreen():
     ClearScreen()
     PrintWithDelay("Bem vindo(a) a Rng do victor", 0)
-    PrintWithDelay(f"You comecara com {RollPoints} Roll Points .", 0.5)
+    PrintWithDelay(f"Voce comecara com {RollPoints} Roll Points .", 0.5)
     PrintWithDelay("Voce pode usar esses RollPoints para gerar personagens e usar esses personagens em batalhas", 0.5)
     PrintWithDelay("Pressione enter para comecar a diversao...", 0.5)
     input()
