@@ -236,14 +236,14 @@ def ShowInventory():
             else:
                 PrintWithDelay("Seus Personagens:", 0.5)
                 for idx, (item, count) in enumerate(characters.items(), 1):
-                    PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
+                    PrintWithDelay(f"{idx} {item}: {count}", 0.25)
             
 
         # Exibe as frutas
         if fruits:
             PrintWithDelay("Suas frutas:", 0.5)
             for idx, (item, count) in enumerate(fruits.items(), 1):
-                PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
+                PrintWithDelay(f" {item}: {count}", 0.25)
 
 # Função para gerar um bot com probabilidades baseadas no sistema de roll
 def GenerateBot():
