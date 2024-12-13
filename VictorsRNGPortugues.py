@@ -74,34 +74,35 @@ SupremeDMG = 0
 
 # Personagens (cada personagem começa com vida e dano próprio)
 characters = {
-    "fruit": {"Rarity": "common","regen": 0},
-    "Dummy": {"Rarity": "common", "Health": 5, "Attack": 1},
+    "fruit": {"Rarity": "comum","regen": 0},
+    "Dummy": {"Rarity": "comum", "Health": 5, "Attack": 1},
    
-    "Rock": {"Rarity": "common", "Health": 1, "Attack": 10},
-    "Big Ol Metal Bar (B.O.M.B)": {"Rarity": "common", "Health": 120, "Attack": 1},
-    "Balde Portugues": {"Rarity": "common", "Health": 10, "Attack": 20},
-    "Fake Dummy": {"Rarity": "common", "Health": 1, "Attack": 1},
-    "Nerd": {"Rarity": "uncommon", "Health": 20, "Attack": 5},
-    "Douglas": {"Rarity": "uncommon", "Health": 90, "Attack": 30},
-    "Especificamente o Astolfo, o nerd daquele canal la": {"Rarity": "uncommon", "Health": 50, "Attack": 50},
-    "Cube": {"Rarity": "rare", "Health": 60, "Attack": 20},
-    "Sphere": {"Rarity": "rare", "Health": 60, "Attack": 40},
-    "Pyramid": {"Rarity": "rare", "Health": 60, "Attack": 60},
-    "Star (platinum star)": {"Rarity": "rare", "Health": 60, "Attack": 80},
-    "Victor": {"Rarity": "epic", "Health": 300, "Attack": 60},
-    "Paulo": {"Rarity": "epic", "Health": 600, "Attack": 50},
-    "Caio": {"Rarity": "epic", "Health": 450, "Attack": 190},
-    "Nicolas": {"Rarity": "epic", "Health": 700, "Attack": 670},
-    "Woodpecker": {"Rarity": "mythic", "Health": 900, "Attack": 300},
-    "Ca-Caw": {"Rarity": "legendary", "Health": 4000, "Attack": 900},
-    "God": {"Rarity": "legendary", "Health": 6000, "Attack": 900},
-    "Supreme Nerd": {"Rarity": "legendary", "Health": 10000, "Attack": 6000},
+    "Rock": {"Rarity": "comum", "Health": 1, "Attack": 10},
+    "Big Ol Metal Bar (B.O.M.B)": {"Rarity": "comum", "Health": 120, "Attack": 1},
+    "Balde Portugues": {"Rarity": "comum", "Health": 10, "Attack": 20},
+    "Fake Dummy": {"Rarity": "comum", "Health": 1, "Attack": 1},
+    "Nerd": {"Rarity": "incomum", "Health": 20, "Attack": 5},
+    "Douglas": {"Rarity": "incomum", "Health": 90, "Attack": 30},
+    "Especificamente o Astolfo, o nerd daquele canal la": {"Rarity": "incomum", "Health": 50, "Attack": 50},
+    "Cube": {"Rarity": "raro", "Health": 60, "Attack": 20},
+    "Sphere": {"Rarity": "raro", "Health": 60, "Attack": 40},
+    "Pyramid": {"Rarity": "raro", "Health": 60, "Attack": 60},
+    "Star (platinum star)": {"Rarity": "raro", "Health": 60, "Attack": 80},
+    "Victor": {"Rarity": "epico", "Health": 300, "Attack": 60},
+    "Paulo": {"Rarity": "epico", "Health": 600, "Attack": 50},
+    "Caio": {"Rarity": "epico", "Health": 450, "Attack": 190},
+    "Nicolas": {"Rarity": "epico", "Health": 700, "Attack": 670},
+    "Woodpecker": {"Rarity": "mitico", "Health": 900, "Attack": 300},
+    "Ca-Caw": {"Rarity": "lendario", "Health": 4000, "Attack": 900},
+    "God": {"Rarity": "lendario", "Health": 6000, "Attack": 900},
+    "Supreme Nerd": {"Rarity": "lendario", "Health": 10000, "Attack": 6000},
 }
 
 # Função para limpar a tela
 def ClearScreen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+# Função para mostrar texto com atraso variável
 # Função para mostrar texto com atraso variável
 def PrintWithDelay(text, delay=0.5):
     print(text)
@@ -110,10 +111,10 @@ def PrintWithDelay(text, delay=0.5):
 # Função para mostrar a tela inicial
 def ShowMainScreen():
     ClearScreen()
-    PrintWithDelay("Welcome to Victor`s rng", 0)
-    PrintWithDelay(f"You have {RollPoints} Roll Points to start.", 0.5)
-    PrintWithDelay("Use them to roll for characters and battle!", 0.5)
-    PrintWithDelay("Press Enter to start...", 0.5)
+    PrintWithDelay("Bem vindo(a) a Rng do victor", 0)
+    PrintWithDelay(f"You comecara com {RollPoints} Roll Points .", 0.5)
+    PrintWithDelay("Voce pode usar esses RollPoints para gerar personagens e usar esses personagens em batalhas", 0.5)
+    PrintWithDelay("Pressione enter para comecar a diversao...", 0.5)
     input()
 
 # Função para realizar o roll
@@ -122,7 +123,7 @@ def Roll(single_roll=True):
     ClearScreen()
 
     if RollPoints <= 0:
-        PrintWithDelay("You don't have Roll Points :(", 0.5)
+        PrintWithDelay("Voce nao tem mais nenhum rollPoint :(", 0.5)
         return
 
     rolls_to_do = RollPoints if not single_roll else 1
@@ -131,7 +132,7 @@ def Roll(single_roll=True):
     # Realiza os rolls
     for _ in range(rolls_to_do):
         num = random.randint(0, 1000)  # Gera um número entre 0 e 1000
-        print(f"Congratulations, you rolled {num}")
+        print(f"Parabens, voce gerou o numero {num}")
         # Determina o personagem obtido com base no número gerado
         if 0 <= num < 100:
             item = "Dummy"
@@ -175,8 +176,8 @@ def Roll(single_roll=True):
                 item = "God"
             else:
                 item = "Supreme Nerd"
-        PrintWithDelay(f"You rolled and got: {item} ({characters[item]['Rarity']})", 0.5)
-        input("press enter to continue...")
+        PrintWithDelay(f"Voce conseguiu um: {item} ({characters[item]['Rarity']})", 0.5)
+        input("Pressione enter para continuar...")
 
         # Atualiza o inventário
         if item in ItemsOwned:
@@ -185,7 +186,7 @@ def Roll(single_roll=True):
             ItemsOwned[item] = 1
 
     # Exibe o número de Roll Points restantes
-    PrintWithDelay(f"You have {RollPoints} Roll Points remaining.", 1)
+    PrintWithDelay(f"Voce tem {RollPoints} Roll Points restantes.", 1)
     save_roll_points(RollPoints)
 
 
@@ -224,23 +225,23 @@ def ShowInventory():
         has_fruits = True
     # Exibe os resultados com base nos itens
     if not characters and not fruits:  # Verifica se não há nenhum item
-        PrintWithDelay("Your inventory is empty.", 0.5)
+        PrintWithDelay("Seu inventario esta vazio :(.", 0.5)
     else:
         # Exibe os personagens
         if characters:
             if has_fruits:
-                PrintWithDelay("Your characters:", 0.5)
+                PrintWithDelay("Seus Personagens:", 0.5)
                 for idx, (item, count) in enumerate(characters.items(), 1):
                     PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
             else:
-                PrintWithDelay("Your characters:", 0.5)
+                PrintWithDelay("Seus Personagens:", 0.5)
                 for idx, (item, count) in enumerate(characters.items(), 1):
                     PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
             
 
         # Exibe as frutas
         if fruits:
-            PrintWithDelay("Your fruits:", 0.5)
+            PrintWithDelay("Suas frutas:", 0.5)
             for idx, (item, count) in enumerate(fruits.items(), 1):
                 PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
 
@@ -416,27 +417,27 @@ def BattleCharacter(character_name):
     enemy_attack = enemy_stats["Attack"]
 
     # Iniciar batalha
-    PrintWithDelay(f"Battle starts! {character_name} vs. {enemy}", 1)
-    PrintWithDelay("Press enter to continue the battle.", 1)
+    PrintWithDelay(f"A batalha comecou!!! {character_name} vs. {enemy}", 1)
+    PrintWithDelay("Pressione enter para passar os turnos.", 1)
     while character_health > 0 and enemy_health > 0:
         input("...")
         a = random.randint(0, 1)
         if a == 0:
             enemy_health -= character_attack
-            PrintWithDelay(f"Your {character_name} attacks {enemy} for {character_attack} damage! {enemy} HP: {enemy_health}", 1)
+            PrintWithDelay(f"O seu {character_name} ataca {enemy} dando {character_attack} de dano! {enemy} HP inimigo: {enemy_health}", 1)
             if enemy_health <= 0:
-                PrintWithDelay(f"{enemy} is defeated!", 1)
+                PrintWithDelay(f"{enemy} inimigo perdeu a batalha!", 1)
                 return True  # O jogador venceu
         else:
             character_health -= enemy_attack
             takeDamage(character_name, enemy_attack)
-            PrintWithDelay(f"{enemy} attacks {character_name} for {enemy_attack} damage! {character_name} HP: {character_health}", 1)
+            PrintWithDelay(f"{enemy} ataca {character_name} dando {enemy_attack} de dano! {character_name} Seu HP: {character_health}", 1)
 
             # Perguntar ao jogador se deseja usar uma fruta
             if character_health > 0:
                 if "fruit" in ItemsOwned and ItemsOwned["fruit"] > 0:
-                    use_fruit = input("Do you want to use a fruit to heal? (y/n): ").strip().lower()
-                    if use_fruit == 'y':
+                    use_fruit = input("Voce tomou dano! quer comer uma fruta para regenerar parte de sua vida? use somente quando necessario. (s/n): ").strip().lower()
+                    if use_fruit == 's':
                         ItemsOwned["fruit"] -= 1  # Remove uma fruta do inventário
                         if ItemsOwned["fruit"] == 0:
                             del ItemsOwned["fruit"]
@@ -448,14 +449,14 @@ def BattleCharacter(character_name):
                         if character_health > character_stats["Health"]:
                             excess = character_health - character_stats["Health"]
                             character_health = character_stats["Health"]
-                            PrintWithDelay(f"Your {character_name} used a fruit and fully healed! Excess healing of {excess} was discarded.", 1)
+                            PrintWithDelay(f"Seu {character_name} comeu uma fruta e regenerou a vida totalmente!.", 1)
                         else:
-                            PrintWithDelay(f"Your {character_name} used a fruit and healed {heal_amount} HP! Current HP: {character_health}", 1)
+                            PrintWithDelay(f"Seu {character_name} comeu uma fruta e regenerou {heal_amount} HP! HP atual: {character_health}", 1)
                 else:
-                    PrintWithDelay("You don't have any fruits left to use!", 1)
+                    PrintWithDelay("Voce nao tem frutas para usar!", 1)
 
             if character_health <= 0:
-                PrintWithDelay(f"{character_name} is defeated!", 1)
+                PrintWithDelay(f"Seu {character_name} Perdeu", 1)
                 resetDamage(character_name)
                 return False  # O personagem morreu
 
@@ -465,7 +466,7 @@ def Battle():
     global RollPoints, ItemsOwned
     # Verifica se o jogador tem personagens suficientes para batalhar
     if not ItemsOwned:
-        PrintWithDelay("You don't have any characters to battle.", 0.5)
+        PrintWithDelay("Voce nao tem personagens para batalhar.", 0.5)
         return
 
     # Mostrar inventário e escolher personagem
@@ -474,7 +475,7 @@ def Battle():
     # Escolher o próximo personagem para a batalha
     while ItemsOwned:
         try:
-            choice = int(input("Choose a character by number from your inventory: ").strip())
+            choice = int(input("Escolha um personagem: ").strip())
 
             # Validar escolha
             valid_choices = [i + 1 for i, item in enumerate(ItemsOwned.keys()) if item != "fruit"]
@@ -488,9 +489,9 @@ def Battle():
 
                     if result:
                         # Se venceu, ganha Roll Points
-                        PrintWithDelay(f"You win the battle with {chosen_character}!", 1)
+                        PrintWithDelay(f"Voce ganhou a batalha com {chosen_character}!", 1)
                         RollPoints += 3
-                        PrintWithDelay(f"You gain 3 Roll Point! Total Roll Points: {RollPoints}", 0.5)
+                        PrintWithDelay(f"Voce ganhou {RollPoints} rollPoints!", 0.5)
                     else:
                         # Se perdeu, remove o personagem do inventário
                         ItemsOwned[chosen_character] -= 1
@@ -499,17 +500,17 @@ def Battle():
 
                         if ItemsOwned[chosen_character] == 0:
                             del ItemsOwned[chosen_character]
-                        PrintWithDelay(f"Your {chosen_character} is defeated. You lost this battle. You lost 1 rollPoint", 1)
+                        PrintWithDelay(f"Seu {chosen_character} perdeu a batalha! voce perdeu 1 rollPoint", 1)
                     break  # Volta para o menu após a batalha
                 else:
-                    PrintWithDelay("Invalid character or no more characters available for battle.", 0.5)
+                    PrintWithDelay("Personagem invalido ou sem personagens", 0.5)
             else:
-                PrintWithDelay("Invalid number. Please choose a valid character.", 0.5)
+                PrintWithDelay("Numero invalido, escolha um numero correto.", 0.5)
         except ValueError:
-            PrintWithDelay("Please enter a valid number.", 0.5)
+            PrintWithDelay("Escreva um numero valido.", 0.5)
 
     if not ItemsOwned:
-        PrintWithDelay("You have no more characters left to battle. Game Over!", 2)
+        PrintWithDelay("Voce nao tem mais personagens para batalhar!", 2)
 
 # Função para jogar o jogo
 def PlayGame():
@@ -520,15 +521,15 @@ def PlayGame():
     while True:
         # Mostrar opções de menu
         ClearScreen()
-        PrintWithDelay("Main Menu", 0)
+        PrintWithDelay("Menu principal\nEscolha um numero para fazer a acao", 0)
         PrintWithDelay(f"Roll Points: {RollPoints}", 0.5)
-        PrintWithDelay("1. Roll for a new character", 0.5)
-        PrintWithDelay("2. Roll all available Roll Points", 0.5)  # Nova opção para rolar todos os Roll Points
-        PrintWithDelay("3. Show inventory", 0.5)
-        PrintWithDelay("4. Battle with a random bot", 0.5)
-        PrintWithDelay("5. Exit", 0.5)
+        PrintWithDelay("1. Gerar um personagem", 0.5)
+        PrintWithDelay("2. Gerar todos os rollPoints", 0.5)  # Nova opção para rolar todos os Roll Points
+        PrintWithDelay("3. Mostrar inventario", 0.5)
+        PrintWithDelay("4. Batalha com um bot aleatorio", 0.5)
+        PrintWithDelay("5. Sair do jogo (nao recomendo, e feio)", 0.5)
 
-        option = input("\nChoose an option: ")
+        option = input("\nEscolha uma opcao: ")
 
         if option == "1":
             Roll()
@@ -536,16 +537,16 @@ def PlayGame():
             Roll(single_roll=False)  # Chama Roll para todos os Roll Points
         elif option == "3":
             ShowInventory()
-            input("Press Enter to quit inventory...")
+            input("Pressione enter pra sair...")
         elif option == "4":
             Battle()
         elif option == "5":
-            PrintWithDelay("Thanks for playing!", 0.5)
+            PrintWithDelay("Ficarei com saudades!", 0.5)
             save_inventory(ItemsOwned)
             save_roll_points(RollPoints)
             break
         else:
-            PrintWithDelay("Invalid option. Please try again.", 0.5)
+            PrintWithDelay("Numero invalido! tente de novo.", 0.5)
 
 # Iniciar o jogo
 PlayGame()

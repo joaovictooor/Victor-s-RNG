@@ -103,6 +103,7 @@ def ClearScreen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 # Função para mostrar texto com atraso variável
+# Função para mostrar texto com atraso variável
 def PrintWithDelay(text, delay=0.5):
     print(text)
     time.sleep(delay)
