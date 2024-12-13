@@ -211,13 +211,38 @@ def save_inventory(items_owned, filename="inventory.json"):
 
 # Exibir o inventário numerado
 def ShowInventory():
-    ClearScreen()
-    if not ItemsOwned:
+    has_fruits = False
+    ClearScreen()  # Limpa a tela antes de exibir o inventário
+
+    # Contadores separados para characters e fruits
+    characters = {item: count for item, count in ItemsOwned.items() if not "fruit" in item.lower()}
+
+    fruits = {item: count for item, count in ItemsOwned.items() if 'fruit' in item.lower()}
+    if not fruits:
+        has_fruits = False
+    else:
+        has_fruits = True
+    # Exibe os resultados com base nos itens
+    if not characters and not fruits:  # Verifica se não há nenhum item
         PrintWithDelay("Your inventory is empty.", 0.5)
     else:
-        PrintWithDelay("Your inventory:", 0.5)
-        for idx, (item, count) in enumerate(ItemsOwned.items(), 1):
-            PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
+        # Exibe os personagens
+        if characters:
+            if has_fruits:
+                PrintWithDelay("Your characters:", 0.5)
+                for idx, (item, count) in enumerate(characters.items(), 1):
+                    PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
+            else:
+                PrintWithDelay("Your characters:", 0.5)
+                for idx, (item, count) in enumerate(characters.items(), 1):
+                    PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
+            
+
+        # Exibe as frutas
+        if fruits:
+            PrintWithDelay("Your fruits:", 0.5)
+            for idx, (item, count) in enumerate(fruits.items(), 1):
+                PrintWithDelay(f"{idx}. {item}: {count}", 0.25)
 
 # Função para gerar um bot com probabilidades baseadas no sistema de roll
 def GenerateBot():
@@ -259,7 +284,11 @@ def GenerateBot():
     elif 998 <= num < 1000:
         item = "Ca-Caw"
     else:
-        item = "God"
+        a = random.randint(1,3)
+        if a == 1:
+            item = "Supreme Nerd"
+        else:
+            item = "God"
     return item
 def takeDamage(chara, dmg):
     global DumbDMG, RockDMG, BOMBDMG, BaldeDMG, FakeDummyDMG, NerdDMG, DouglasDMG
