@@ -7,6 +7,11 @@ import json
  # Jogador começa com 10 Roll Points
 
 RollPoints = 0
+NDeBatalhas = 0
+BatalhasGanhas = 0
+
+
+
 
 
 # Salvando os RollPoints
@@ -36,6 +41,8 @@ def load_inventory(filename="inventory.json"):
         return items_owned
     except FileNotFoundError:
         print("Nenhum inventário encontrado. Criando um novo...")
+        NDeBatalhas = 0
+        BatalhasGanhas = 0
         return {}  # Retorna um inventário vazio se o arquivo não existir
 
 ItemsOwned = load_inventory()
@@ -71,6 +78,101 @@ CaCawDMG = 0
 GodDMG = 0
 SupremeDMG = 0
 
+
+
+Missions = {
+    "Batalhar 30 vezes: (ganha 30 rollPoints)": False,
+    "Ganhar uma batalha contra um Lendario(ganha 400 rollPoints)": False,
+    "Adquirir 350 RollPoints(ganha 40 fruits)": False,
+    "Conseguir todos os personagens(ganha 500 rollPoints)":False,
+    "Ganhar 45 Batalhas (ganha 34 fruits)": False,
+    "Perder Para uma pedra (Kkkkkkkkkk isso ja e humilhante o suficiente)": False,
+    "Luta quase infinita: B.O.M.B vs B.O.M.B (ganha 9 rollpoits)" : False,
+    "Adquirir 50 Frutas (ganha 20 rollpoints)": False,
+    "Completar todas as missoes(ganha 600 Rollpoints e 400 fruits)": False
+}
+
+
+def ChecarMissions(Num):
+    Missions[Num] = True
+    print(f"Parabens! Voce completou uma missao: {Missions[Num]}")
+
+def ganharMissions():
+    global RollPoints, BatalhasGanhas, ItemsOwned, NDeBatalhas
+    
+    itemsconseguidos = 0  # contador de missões completadas
+
+    # Missão 1: Batalhar 30 vezes
+    if NDeBatalhas >= 30 and not Missions["Batalhar 30 vezes: (ganha 30 rollPoints)"]:
+        ChecarMissions("Batalhar 30 vezes: (ganha 30 rollPoints)")
+        RollPoints += 30
+
+    # Missão 2: Ganhar uma batalha contra um Lendário
+    
+
+    # Missão 3: Adquirir 350 RollPoints
+    if RollPoints >= 350 and not Missions["Adquirir 350 RollPoints(ganha 40 fruits)"]:
+        ChecarMissions("Adquirir 350 RollPoints(ganha 40 fruits)")
+        ItemsOwned["fruit"] = ItemsOwned.get("fruit", 0) + 40
+
+    # Missão 4: Conseguir todos os personagens
+    if len(ItemsOwned) >= len(characters) and not Missions["Conseguir todos os personagens(ganha 500 rollPoints)"]:
+        ChecarMissions("Conseguir todos os personagens(ganha 500 rollPoints)")
+        RollPoints += 500
+
+    # Missão 5: Ganhar 45 batalhas
+    if BatalhasGanhas >= 45 and not Missions["Ganhar 45 Batalhas (ganha 34 fruits)"]:
+        ChecarMissions("Ganhar 45 Batalhas (ganha 34 fruits)")
+        ItemsOwned["fruit"] = ItemsOwned.get("fruit", 0) + 34
+
+    # Missão 6: Perder para uma pedra
+
+    # Missão 7: Luta quase infinita (B.O.M.B vs B.O.M.B)
+    
+
+    # Missão 8: Adquirir 50 Frutas
+    if ItemsOwned.get("fruit", 0) >= 50 and not Missions["Adquirir 50 Frutas (ganha 20 rollpoints)"]:
+        ChecarMissions("Adquirir 50 Frutas (ganha 20 rollpoints)")
+        RollPoints += 20
+
+    # Missão 9: Completar todas as missões
+    for key in Missions:
+        if Missions[key]:
+            itemsconseguidos += 1
+    if itemsconseguidos == 9 and not Missions["Completar todas as missoes(ganha 600 Rollpoints e 400 fruits)"]:
+        ChecarMissions("Completar todas as missoes(ganha 600 Rollpoints e 400 fruits)")
+        RollPoints += 600
+        ItemsOwned["fruit"] = ItemsOwned.get("fruit", 0) + 400
+
+    
+
+
+def MostrarMissoes():
+    print("Missões e Status:")
+    for nome, completa in Missions.items():
+        if completa:
+            print(f"{nome}: Completa")
+        else:
+            print(f"{nome}: Incompleta")
+
+
+
+ 
+def SalvarMissoes():
+    with open('missoes.json', 'w') as arquivo:
+        json.dump(Missions, arquivo)
+    print("Progresso das missões salvo com sucesso!")
+
+def CarregarMissoes():
+    try:
+        with open('missoes.json', 'r') as arquivo:
+            global Missions
+            Missions = json.load(arquivo)
+        print("Progresso das missões carregado com sucesso!")
+    except FileNotFoundError:
+        print("Nenhum arquivo de progresso encontrado. Começando do zero.")
+
+CarregarMissoes()
 
 # Personagens (cada personagem começa com vida e dano próprio)
 characters = {
@@ -358,6 +460,24 @@ def takeDamage(chara, dmg):
         return SupremeDMG
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def resetDamage(chara):
     global DumbDMG, RockDMG, BOMBDMG, BaldeDMG, FakeDummyDMG, NerdDMG, DouglasDMG
     global AstolfoDMG, CubeDMG, SphereDMG, PyramidDMG, StarDMG, VicDMG, PauloDMG
@@ -404,6 +524,10 @@ def resetDamage(chara):
     if chara == "Supreme Nerd":
         SupremeDMG = 0
 def BattleCharacter(character_name):
+    global NDeBatalhas,BatalhasGanhas
+
+
+    NDeBatalhas += 1
     ClearScreen()
     global dmgtaken
     character_stats = characters[character_name]
@@ -418,6 +542,9 @@ def BattleCharacter(character_name):
 
     # Iniciar batalha
     PrintWithDelay(f"A batalha comecou!!! {character_name} vs. {enemy}", 1)
+    if character_name == "Big Ol Metal Bar (B.O.M.B)" and enemy == "Big Ol Metal Bar (B.O.M.B)":
+        ChecarMissions("Luta quase infinita: B.O.M.B vs B.O.M.B (ganha 9 rollpoits)")
+        RollPoints += 9
     PrintWithDelay("Pressione enter para passar os turnos.", 1)
     while character_health > 0 and enemy_health > 0:
         input("...")
@@ -427,6 +554,10 @@ def BattleCharacter(character_name):
             PrintWithDelay(f"O seu {character_name} ataca {enemy} dando {character_attack} de dano! {enemy} HP inimigo: {enemy_health}", 1)
             if enemy_health <= 0:
                 PrintWithDelay(f"{enemy} inimigo perdeu a batalha!", 1)
+                if enemy == "Ca-Caw" or enemy == "God" or enemy == "Supreme Nerd":
+                    ChecarMissions("Ganhar uma batalha contra um Lendario(ganha 400 rollPoints)")
+                    RollPoints += 400
+                BatalhasGanhas += 1
                 return True  # O jogador venceu
         else:
             character_health -= enemy_attack
@@ -457,6 +588,8 @@ def BattleCharacter(character_name):
 
             if character_health <= 0:
                 PrintWithDelay(f"Seu {character_name} Perdeu", 1)
+                if enemy == "Rock":
+                    ChecarMissions("Perder Para uma pedra (Kkkkkkkkkk isso ja e humilhante o suficiente)")
                 resetDamage(character_name)
                 return False  # O personagem morreu
 
@@ -491,7 +624,7 @@ def Battle():
                         # Se venceu, ganha Roll Points
                         PrintWithDelay(f"Voce ganhou a batalha com {chosen_character}!", 1)
                         RollPoints += 3
-                        PrintWithDelay(f"Voce ganhou {RollPoints} rollPoints!", 0.5)
+                        PrintWithDelay(f"Voce ganhou 3 rollPoints!", 0.5)
                     else:
                         # Se perdeu, remove o personagem do inventário
                         ItemsOwned[chosen_character] -= 1
@@ -527,7 +660,10 @@ def PlayGame():
         PrintWithDelay("2. Gerar todos os rollPoints", 0.5)  # Nova opção para rolar todos os Roll Points
         PrintWithDelay("3. Mostrar inventario", 0.5)
         PrintWithDelay("4. Batalha com um bot aleatorio", 0.5)
-        PrintWithDelay("5. Sair do jogo (nao recomendo, e feio)", 0.5)
+        PrintWithDelay("5. Checar e atualizar Missoes")
+        PrintWithDelay("6. Sair do jogo (nao recomendo, e feio)", 0.5)
+
+        ganharMissions()
 
         option = input("\nEscolha uma opcao: ")
 
@@ -541,10 +677,18 @@ def PlayGame():
         elif option == "4":
             Battle()
         elif option == "5":
-            PrintWithDelay("Ficarei com saudades!", 0.5)
+            ClearScreen()
+            ganharMissions()
+            MostrarMissoes()
+            input("Pressione enter para sair...")
+        elif option == "6":
+            ClearScreen()
+            PrintWithDelay("Sai nao, por favooo")
             save_inventory(ItemsOwned)
             save_roll_points(RollPoints)
-            break
+            SalvarMissoes()
+            quit()
+
         else:
             PrintWithDelay("Numero invalido! tente de novo.", 0.5)
 
